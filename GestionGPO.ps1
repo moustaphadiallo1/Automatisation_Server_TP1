@@ -41,7 +41,7 @@ Write-Output "GPO '$($gpo)' a été créé avec succès et l'installation automa
 
 # GPO bloquer port USB sauf le groupe nommé Tech
 $nomGPOForUSB = "GPO_USB_Access"
-$getAllGroup = Get-ADGroup -Filter *
+$getAllGroup = Get-ADGroup
 New-GPO -Name $nomGPOForUSB -Comment "Ce Gpo permet d'ajouter un accès restreinte à tout les goupes dans le domaine NovaTechMMMR.local sauf le group Tech pour avoir accès au port USB"
 
 foreach($group in $getAllGroup) {
@@ -49,7 +49,8 @@ foreach($group in $getAllGroup) {
         if($group.DisplayName -ne "Tech"){
             $groupName = $group.DisplayName
 
-            New-GPLink -Name $nomGPOForUSB -Target $groupName
+            Set-GPRegistryValue -Name $nomGPOForUSB -Key "HKLM\SYSTEM\CurrentControlSet\Services\USBSTOR" -ValueName "Start" -Type DWord -Value 4 -Context Machine -PropertyType Registry
+            Write-Host "USB ports blocked for $($group.Name)"
 
         }
     }
