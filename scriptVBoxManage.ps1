@@ -21,3 +21,4 @@ VBoxManage createhd --filename "$Storage\$VMName.vdi" --size 25000
 VBoxManage storageattach $VMName --storagectl "SATA Controller" --port 1 --device 0 --type hdd --medium "$Storage\$VMName.vdi"
 
 VBoxManage modifyvm $VMName --memory $VMRAM --cpus 2
+# test de la reussite 
